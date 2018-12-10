@@ -41,7 +41,7 @@ public class SimpleSelectApp {
             true),
         DataTypes.createStructField(
             "yr1980",
-            DataTypes.StringType,
+            DataTypes.DoubleType,
             false) });
 
     // Reads a CSV file with header, called books.csv, stores it in a dataframe
@@ -52,9 +52,11 @@ public class SimpleSelectApp {
     df.createOrReplaceTempView("geodata");
     df.printSchema();
 
-    Dataset<Row> smallCountries = spark.sql("select * from geodata ");
+    Dataset<Row> smallCountries =
+        spark.sql(
+            "select * from geodata where yr1980 < 1 order by 2 limit 5");
 
-    // Shows at most 5 rows from the dataframe
+    // Shows at most 10 rows from the dataframe (which is limited to 5 anyway)
     smallCountries.show(10);
   }
 }
