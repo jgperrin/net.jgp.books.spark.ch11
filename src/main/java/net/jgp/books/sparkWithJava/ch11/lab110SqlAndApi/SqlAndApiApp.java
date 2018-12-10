@@ -165,25 +165,40 @@ public class SqlAndApiApp {
             DataTypes.DoubleType,
             false) });
 
-    // Reads a CSV file with header, called books.csv, stores it in a dataframe
+    // Reads a CSV file with header (as specified in the schema), called
+    // populationbycountry19802010millions.csv, stores it in a dataframe
     Dataset<Row> df = spark.read().format("csv")
         .option("header", true)
         .schema(schema)
         .load("data/populationbycountry19802010millions.csv");
+
+    // Remove the columns we do not want
     for (int i = 1981; i < 2010; i++) {
       df = df.drop(df.col("yr" + i));
     }
+
+    // Creates a new column with the evolution of the population between 1980
+    // and 2010
     df = df.withColumn(
-        "evolution", 
+        "evolution",
         functions.expr("round((yr2010 - yr1980) * 1000000)"));
     df.createOrReplaceTempView("geodata");
-    df.printSchema();
 
-    Dataset<Row> smallCountries =
+    Dataset<Row> negativeEvolutionDf =
         spark.sql(
-            "select * from geodata where yr1980 < 1 order by 2 limit 5");
+            "select * from geodata "
+                + "where geo is not null and evolution<=0 "
+                + "order by evolution limit 25");
 
-    // Shows at most 10 rows from the dataframe (which is limited to 5 anyway)
-    smallCountries.show(10);
+    // Shows at most 15 rows from the dataframe
+    negativeEvolutionDf.show(15, false);
+
+    Dataset<Row> moreThanAMillionDf =
+        spark.sql(
+            "select * from geodata "
+                + "where geo is not null and evolution>999999 "
+                + "order by evolution desc limit 25");
+    moreThanAMillionDf.show(15, false);
+
   }
 }
