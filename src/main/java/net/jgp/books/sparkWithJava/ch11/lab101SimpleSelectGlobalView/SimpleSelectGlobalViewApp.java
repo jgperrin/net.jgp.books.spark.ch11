@@ -1,4 +1,4 @@
-package net.jgp.books.sparkWithJava.ch11.lab100SimpleSelect;
+package net.jgp.books.sparkWithJava.ch11.lab101SimpleSelectGlobalView;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -8,11 +8,11 @@ import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
 /**
- * Simple SQL select on ingested data
+ * Simple SQL select on ingested data, using a global view
  * 
  * @author jgp
  */
-public class SimpleSelectApp {
+public class SimpleSelectGlobalViewApp {
 
   /**
    * main() is your entry point to the application.
@@ -20,7 +20,7 @@ public class SimpleSelectApp {
    * @param args
    */
   public static void main(String[] args) {
-    SimpleSelectApp app = new SimpleSelectApp();
+    SimpleSelectGlobalViewApp app = new SimpleSelectGlobalViewApp();
     app.start();
   }
 
@@ -49,14 +49,23 @@ public class SimpleSelectApp {
         .option("header", true)
         .schema(schema)
         .load("data/populationbycountry19802010millions.csv");
-    df.createOrReplaceTempView("geodata");
+    df.createOrReplaceGlobalTempView("geodata");
     df.printSchema();
 
-    Dataset<Row> smallCountries =
+    Dataset<Row> smallCountriesDf =
         spark.sql(
-            "SELECT * FROM geodata WHERE yr1980 < 1 ORDER BY 2 LIMIT 5");
+            "SELECT * FROM global_temp.geodata "
+            + "WHERE yr1980 < 1 ORDER BY 2 LIMIT 5");
 
     // Shows at most 10 rows from the dataframe (which is limited to 5 anyway)
-    smallCountries.show(10, false);
+    smallCountriesDf.show(10, false);
+
+    // Create a new session and query the same data
+    SparkSession spark2 = spark.newSession();
+    Dataset<Row> slightlyBiggerCountriesDf =
+        spark2.sql(
+            "SELECT * FROM global_temp.geodata "
+            + "WHERE yr1980 >= 1 ORDER BY 2 LIMIT 5");
+    slightlyBiggerCountriesDf.show(10, false);
   }
 }
