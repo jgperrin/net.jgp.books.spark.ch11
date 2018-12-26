@@ -9,7 +9,8 @@ import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
 /**
- * Simple SQL select on ingested data
+ * Simple SQL select on ingested data after preparing the data with the
+ * dataframe API.
  * 
  * @author jgp
  */
@@ -29,12 +30,13 @@ public class SqlAndApiApp {
    * The processing code.
    */
   private void start() {
-    // Creates a session on a local master
+    // Create a session on a local master
     SparkSession spark = SparkSession.builder()
         .appName("Simple SQL")
         .master("local")
         .getOrCreate();
 
+    // Create the schema for the whole dataset
     StructType schema = DataTypes.createStructType(new StructField[] {
         DataTypes.createStructField(
             "geo",
@@ -186,18 +188,20 @@ public class SqlAndApiApp {
 
     Dataset<Row> negativeEvolutionDf =
         spark.sql(
-            "select * from geodata "
-                + "where geo is not null and evolution<=0 "
-                + "order by evolution limit 25");
+            "SELECT * FROM geodata "
+                + "WHERE geo IS NOT NULL AND evolution<=0 "
+                + "ORDER BY evolution "
+                + "LIMIT 25");
 
     // Shows at most 15 rows from the dataframe
     negativeEvolutionDf.show(15, false);
 
     Dataset<Row> moreThanAMillionDf =
         spark.sql(
-            "select * from geodata "
-                + "where geo is not null and evolution>999999 "
-                + "order by evolution desc limit 25");
+            "SELECT * FROM geodata "
+                + "WHERE geo IS NOT NULL AND evolution>999999 "
+                + "ORDER BY evolution DESC "
+                + "LIMIT 25");
     moreThanAMillionDf.show(15, false);
   }
 }
