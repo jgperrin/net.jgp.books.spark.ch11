@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Simple SQL select on ingested data
+ * Dropping data using SQL
  * 
  * @author jgp
  */
