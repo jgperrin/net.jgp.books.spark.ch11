@@ -1,4 +1,4 @@
-package net.jgp.books.sparkWithJava.ch11.lab200GlobalViewReuse;
+package net.jgp.books.spark.ch11.lab200GlobalViewReuse;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;

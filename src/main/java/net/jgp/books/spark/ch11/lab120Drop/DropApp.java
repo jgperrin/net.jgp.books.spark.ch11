@@ -1,4 +1,4 @@
-package net.jgp.books.sparkWithJava.ch11.lab110SqlAndApi;
+package net.jgp.books.spark.ch11.lab120Drop;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -7,14 +7,17 @@ import org.apache.spark.sql.functions;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Simple SQL select on ingested data after preparing the data with the
- * dataframe API.
+ * Dropping data using SQL
  * 
  * @author jgp
  */
-public class SqlAndApiApp {
+public class DropApp {
+  private static transient Logger log = LoggerFactory.getLogger(
+      DropApp.class);
 
   /**
    * main() is your entry point to the application.
@@ -22,7 +25,7 @@ public class SqlAndApiApp {
    * @param args
    */
   public static void main(String[] args) {
-    SqlAndApiApp app = new SqlAndApiApp();
+    DropApp app = new DropApp();
     app.start();
   }
 
@@ -30,13 +33,14 @@ public class SqlAndApiApp {
    * The processing code.
    */
   private void start() {
-    // Create a session on a local master
+    log.debug("-> start()");
+
+    // Creates a session on a local master
     SparkSession spark = SparkSession.builder()
         .appName("Simple SQL")
         .master("local")
         .getOrCreate();
 
-    // Create the schema for the whole dataset
     StructType schema = DataTypes.createStructType(new StructField[] {
         DataTypes.createStructField(
             "geo",
@@ -186,22 +190,21 @@ public class SqlAndApiApp {
         functions.expr("round((yr2010 - yr1980) * 1000000)"));
     df.createOrReplaceTempView("geodata");
 
-    Dataset<Row> negativeEvolutionDf =
+    log.debug("Territories in orginal dataset: {}", df.count());
+    Dataset<Row> cleanedDf =
         spark.sql(
-            "SELECT * FROM geodata "
-                + "WHERE geo IS NOT NULL AND evolution<=0 "
-                + "ORDER BY evolution "
-                + "LIMIT 25");
-
-    // Shows at most 15 rows from the dataframe
-    negativeEvolutionDf.show(15, false);
-
-    Dataset<Row> moreThanAMillionDf =
-        spark.sql(
-            "SELECT * FROM geodata "
-                + "WHERE geo IS NOT NULL AND evolution>999999 "
-                + "ORDER BY evolution DESC "
-                + "LIMIT 25");
-    moreThanAMillionDf.show(15, false);
+            "select * from geodata where geo is not null "
+                + "and geo != 'Africa' "
+                + "and geo != 'North America' "
+                + "and geo != 'World' "
+                + "and geo != 'Asia & Oceania' "
+                + "and geo != 'Central & South America' "
+                + "and geo != 'Europe' "
+                + "and geo != 'Eurasia' "
+                + "and geo != 'Middle East' "
+                + "order by yr2010 desc");
+    log.debug("Territories in cleaned dataset: {}",
+        cleanedDf.count());
+    cleanedDf.show(20, false);
   }
 }

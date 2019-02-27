@@ -1,4 +1,4 @@
-package net.jgp.books.sparkWithJava.ch11.lab101SimpleSelectGlobalView;
+package net.jgp.books.spark.ch11.lab101SimpleSelectGlobalView;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
