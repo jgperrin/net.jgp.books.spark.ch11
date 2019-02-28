@@ -1,4 +1,4 @@
-package net.jgp.books.spark.ch11.lab110SqlAndApi;
+package net.jgp.books.spark.ch11.lab110_sql_and_api;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;

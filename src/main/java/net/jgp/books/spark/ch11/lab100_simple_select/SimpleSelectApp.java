@@ -1,4 +1,4 @@
-package net.jgp.books.spark.ch11.lab200GlobalViewReuse;
+package net.jgp.books.spark.ch11.lab100_simple_select;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -12,7 +12,7 @@ import org.apache.spark.sql.types.StructType;
  * 
  * @author jgp
  */
-public class SimpleSelectGlobalViewFailedReuseApp {
+public class SimpleSelectApp {
 
   /**
    * main() is your entry point to the application.
@@ -20,7 +20,7 @@ public class SimpleSelectGlobalViewFailedReuseApp {
    * @param args
    */
   public static void main(String[] args) {
-    SimpleSelectGlobalViewFailedReuseApp app = new SimpleSelectGlobalViewFailedReuseApp();
+    SimpleSelectApp app = new SimpleSelectApp();
     app.start();
   }
 
@@ -34,10 +34,27 @@ public class SimpleSelectGlobalViewFailedReuseApp {
         .master("local")
         .getOrCreate();
 
-    // This will fail as it is not the same application
+    StructType schema = DataTypes.createStructType(new StructField[] {
+        DataTypes.createStructField(
+            "geo",
+            DataTypes.StringType,
+            true),
+        DataTypes.createStructField(
+            "yr1980",
+            DataTypes.DoubleType,
+            false) });
+
+    // Reads a CSV file with header, called books.csv, stores it in a dataframe
+    Dataset<Row> df = spark.read().format("csv")
+        .option("header", true)
+        .schema(schema)
+        .load("data/populationbycountry19802010millions.csv");
+    df.createOrReplaceTempView("geodata");
+    df.printSchema();
+
     Dataset<Row> smallCountries =
         spark.sql(
-            "SELECT * FROM global_temp.geodata WHERE yr1980 > 1 ORDER BY 2 LIMIT 5");
+            "SELECT * FROM geodata WHERE yr1980 < 1 ORDER BY 2 LIMIT 5");
 
     // Shows at most 10 rows from the dataframe (which is limited to 5 anyway)
     smallCountries.show(10, false);
