@@ -179,7 +179,8 @@ public class SqlAndApiApp {
       df = df.drop(df.col("yr" + i));
     }
 
-    // Creates a new column with the evolution of the population between 1980
+    // Creates a new column with the evolution of the population between
+    // 1980
     // and 2010
     df = df.withColumn(
         "evolution",

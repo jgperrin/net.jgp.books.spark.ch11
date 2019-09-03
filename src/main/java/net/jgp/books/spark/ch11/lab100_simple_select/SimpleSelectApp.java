@@ -44,7 +44,8 @@ public class SimpleSelectApp {
             DataTypes.DoubleType,
             false) });
 
-    // Reads a CSV file with header, called books.csv, stores it in a dataframe
+    // Reads a CSV file with header, called books.csv, stores it in a
+    // dataframe
     Dataset<Row> df = spark.read().format("csv")
         .option("header", true)
         .schema(schema)
@@ -56,7 +57,8 @@ public class SimpleSelectApp {
         spark.sql(
             "SELECT * FROM geodata WHERE yr1980 < 1 ORDER BY 2 LIMIT 5");
 
-    // Shows at most 10 rows from the dataframe (which is limited to 5 anyway)
+    // Shows at most 10 rows from the dataframe (which is limited to 5
+    // anyway)
     smallCountries.show(10, false);
   }
 }

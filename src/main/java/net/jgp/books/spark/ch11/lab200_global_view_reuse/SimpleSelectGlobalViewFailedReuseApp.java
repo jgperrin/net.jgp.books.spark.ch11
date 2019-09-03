@@ -3,9 +3,6 @@ package net.jgp.books.spark.ch11.lab200_global_view_reuse;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
-import org.apache.spark.sql.types.DataTypes;
-import org.apache.spark.sql.types.StructField;
-import org.apache.spark.sql.types.StructType;
 
 /**
  * Simple SQL select on ingested data
@@ -20,7 +17,8 @@ public class SimpleSelectGlobalViewFailedReuseApp {
    * @param args
    */
   public static void main(String[] args) {
-    SimpleSelectGlobalViewFailedReuseApp app = new SimpleSelectGlobalViewFailedReuseApp();
+    SimpleSelectGlobalViewFailedReuseApp app =
+        new SimpleSelectGlobalViewFailedReuseApp();
     app.start();
   }
 
@@ -39,7 +37,8 @@ public class SimpleSelectGlobalViewFailedReuseApp {
         spark.sql(
             "SELECT * FROM global_temp.geodata WHERE yr1980 > 1 ORDER BY 2 LIMIT 5");
 
-    // Shows at most 10 rows from the dataframe (which is limited to 5 anyway)
+    // Shows at most 10 rows from the dataframe (which is limited to 5
+    // anyway)
     smallCountries.show(10, false);
   }
 }

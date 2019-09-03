@@ -44,7 +44,8 @@ public class SimpleSelectGlobalViewApp {
             DataTypes.DoubleType,
             false) });
 
-    // Reads a CSV file with header, called books.csv, stores it in a dataframe
+    // Reads a CSV file with header, called books.csv, stores it in a
+    // dataframe
     Dataset<Row> df = spark.read().format("csv")
         .option("header", true)
         .schema(schema)
@@ -55,9 +56,10 @@ public class SimpleSelectGlobalViewApp {
     Dataset<Row> smallCountriesDf =
         spark.sql(
             "SELECT * FROM global_temp.geodata "
-            + "WHERE yr1980 < 1 ORDER BY 2 LIMIT 5");
+                + "WHERE yr1980 < 1 ORDER BY 2 LIMIT 5");
 
-    // Shows at most 10 rows from the dataframe (which is limited to 5 anyway)
+    // Shows at most 10 rows from the dataframe (which is limited to 5
+    // anyway)
     smallCountriesDf.show(10, false);
 
     // Create a new session and query the same data
@@ -65,7 +67,7 @@ public class SimpleSelectGlobalViewApp {
     Dataset<Row> slightlyBiggerCountriesDf =
         spark2.sql(
             "SELECT * FROM global_temp.geodata "
-            + "WHERE yr1980 >= 1 ORDER BY 2 LIMIT 5");
+                + "WHERE yr1980 >= 1 ORDER BY 2 LIMIT 5");
     slightlyBiggerCountriesDf.show(10, false);
   }
 }
