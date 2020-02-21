@@ -1,7 +1,7 @@
 package net.jgp.books.spark.ch11.lab200_global_view_reuse
 
-import org.apache.spark.sql.{Dataset, Row, SparkSession}
-import org.apache.spark.sql.types.{DataTypes, StructField, StructType}
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.types.{DataTypes, StructField}
 
 /**
   * Simple SQL select on ingested data
@@ -18,8 +18,9 @@ object SimpleSelectGlobalViewScalaApp {
   def main(args: Array[String]): Unit = {
 
     // Creates a session on a local master
-    val spark = SparkSession.builder.appName("Simple SELECT using SQL")
-      .master("local")
+    val spark = SparkSession.builder
+      .appName("Simple SELECT using SQL")
+      .master("local[*]")
       .getOrCreate
 
     val schema = DataTypes.createStructType(Array[StructField](
@@ -55,9 +56,10 @@ object SimpleSelectGlobalViewScalaApp {
       Thread.sleep(60000)
     catch {
       case e: InterruptedException =>
-        // TODO Auto-generated catch block
         e.printStackTrace()
     }
+
+    spark.stop
   }
 
 }

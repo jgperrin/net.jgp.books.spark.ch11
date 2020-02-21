@@ -19,9 +19,10 @@ object SqlAndApiScalaApp {
   def main(args: Array[String]): Unit = {
 
     // Create a session on a local master
-    val spark = SparkSession.builder.appName("Simple SQL")
-                            .master("local")
-                            .getOrCreate
+    val spark = SparkSession.builder
+      .appName("Simple SQL")
+      .master("local")
+      .getOrCreate
 
     // Create the schema for the whole dataset
     val schema = DataTypes.createStructType(Array[StructField](

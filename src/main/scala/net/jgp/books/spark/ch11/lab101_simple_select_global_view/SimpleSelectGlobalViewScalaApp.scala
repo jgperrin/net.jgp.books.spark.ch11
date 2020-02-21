@@ -18,9 +18,10 @@ object SimpleSelectGlobalViewScalaApp {
   def main(args: Array[String]): Unit = {
 
     // Creates a session on a local master
-    val spark = SparkSession.builder.appName("Simple SELECT using SQL")
-                            .master("local")
-                            .getOrCreate
+    val spark = SparkSession.builder
+      .appName("Simple SELECT using SQL")
+      .master("local")
+      .getOrCreate
 
     val schema = DataTypes.createStructType(Array[StructField](
       DataTypes.createStructField("geo", DataTypes.StringType, true),
@@ -62,6 +63,8 @@ object SimpleSelectGlobalViewScalaApp {
     val slightlyBiggerCountriesDf = spark2.sql(query2)
 
     slightlyBiggerCountriesDf.show(10, false)
+
+    spark.stop
   }
 
 }

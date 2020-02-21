@@ -87,3 +87,6 @@ cleanedDf = spark.sql(query)
 
 log.debug("Territories in cleaned dataset: {}".format(cleanedDf.count))
 cleanedDf.show(20, False)
+
+# Good to stop SparkSession at the end of the application
+spark.stop()

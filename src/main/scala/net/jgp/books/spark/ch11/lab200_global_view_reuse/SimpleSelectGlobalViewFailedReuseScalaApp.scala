@@ -1,6 +1,6 @@
 package net.jgp.books.spark.ch11.lab200_global_view_reuse
 
-import org.apache.spark.sql.{Dataset, Row, SparkSession}
+import org.apache.spark.sql.SparkSession
 
 /**
   * Simple SQL select on ingested data
@@ -16,9 +16,10 @@ object SimpleSelectGlobalViewFailedReuseScalaApp {
     */
   def main(args: Array[String]): Unit = {
     // Creates a session on a local master
-    val spark = SparkSession.builder.appName("Simple SELECT using SQL")
-                                    .master("local")
-                                    .getOrCreate
+    val spark = SparkSession.builder
+      .appName("Simple SELECT using SQL")
+      .master("local[*]")
+      .getOrCreate
 
     val query =
       """
@@ -35,6 +36,8 @@ object SimpleSelectGlobalViewFailedReuseScalaApp {
     // Shows at most 10 rows from the dataframe (which is limited to 5
     // anyway)
     smallCountries.show(10, false)
+
+    spark.stop
   }
 
 }

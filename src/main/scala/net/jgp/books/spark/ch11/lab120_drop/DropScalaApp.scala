@@ -21,9 +21,10 @@ object DropScalaApp {
     log.debug("-> start()")
 
     // Creates a session on a local master
-    val spark = SparkSession.builder.appName("Simple SQL")
-                                    .master("local")
-                                    .getOrCreate
+    val spark = SparkSession.builder
+      .appName("Simple SQL")
+      .master("local")
+      .getOrCreate
 
     val schema = DataTypes.createStructType(Array[StructField](
       DataTypes.createStructField("geo", DataTypes.StringType, true),
@@ -92,6 +93,7 @@ object DropScalaApp {
     log.debug("Territories in cleaned dataset: {}", cleanedDf.count)
     cleanedDf.show(20, false)
 
+    spark.stop
   }
 
 }

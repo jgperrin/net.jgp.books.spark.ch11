@@ -18,9 +18,10 @@ object SimpleSelectScalaApp {
   def main(args: Array[String]): Unit = {
 
     // Creates a session on a local master
-    val spark = SparkSession.builder.appName("Simple SELECT using SQL")
-                            .master("local")
-                            .getOrCreate
+    val spark = SparkSession.builder
+      .appName("Simple SELECT using SQL")
+      .master("local")
+      .getOrCreate
 
     val schema = DataTypes.createStructType(Array[StructField]
       (DataTypes.createStructField("geo", DataTypes.StringType, true),
@@ -49,6 +50,8 @@ object SimpleSelectScalaApp {
     // Shows at most 10 rows from the dataframe (which is limited to 5
     // anyway)
     smallCountries.show(10, false)
+
+    spark.stop
   }
 
 }
