@@ -20,6 +20,22 @@ The `SimpleSelectApp` application does the following:
 2.	It asks Spark to load (ingest) a dataset in CSV format.
 3.	It demonstrates Spark SQL's select on ingested data.
 
+### Lab \#200
+
+TBD
+
+### Lab \#201
+
+TBD
+
+### Lab \#300
+
+TBD
+
+### Lab \#400
+
+TBD
+
 ## Running the lab in Java
 
 For information on running the Java lab, see chapter 11 in [Spark in Action, 2nd edition](http://jgp.net/sia).

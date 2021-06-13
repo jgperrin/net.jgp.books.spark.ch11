@@ -1,4 +1,4 @@
-package net.jgp.books.spark.ch11.lab200_global_view_reuse
+package net.jgp.books.spark.ch11.lab201_global_view_reuse
 
 import org.apache.spark.sql.SparkSession
 
